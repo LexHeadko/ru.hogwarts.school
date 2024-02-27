@@ -49,7 +49,7 @@ public class FacultyController {
     public Faculty deleteFaculty(@PathVariable Long id) {
         return facultyService.deleteFaculty(id);
     }
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Collection<Faculty>> getAllFaculty() {
         return ResponseEntity.ok(facultyService.getAllFaculty());
     }

@@ -49,7 +49,7 @@ public class StudentController {
         return studentService.deleteStudent(id);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Collection<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
