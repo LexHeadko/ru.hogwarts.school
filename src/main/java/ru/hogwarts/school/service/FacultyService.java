@@ -15,11 +15,11 @@ public class FacultyService {
         return faculty;
     }
 
-    public Faculty findBook(Long id) {
+    public Faculty findFaculty(Long id) {
         return faculties.get(id);
     }
 
-    public Faculty editBook(Faculty faculty) {
+    public Faculty editFaculty(Faculty faculty) {
         if (faculties.containsKey(faculty.getId())) {
             faculties.put(faculty.getId(), faculty);
             return faculty;
@@ -27,11 +27,11 @@ public class FacultyService {
         return null;
     }
 
-    public Faculty deleteBook(long id) {
+    public Faculty deleteFaculty(long id) {
         return faculties.remove(id);
     }
 
-    public Collection<Faculty> getAllBooks() {
+    public Collection<Faculty> getAllFaculty() {
         return faculties.values();
     }
 }
