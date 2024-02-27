@@ -20,7 +20,7 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getBookInfo(@PathVariable Long id) {
+    public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
         Student student = studentService.findStudents(id);
         if (student == null) {
             return ResponseEntity.notFound().build();
@@ -35,7 +35,7 @@ public class StudentController {
     }
 
     @PutMapping
-    public ResponseEntity<Student> editBook(@RequestBody Student student) {
+    public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         Student findStudent = studentService.editStudent(student);
         if (findStudent == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
