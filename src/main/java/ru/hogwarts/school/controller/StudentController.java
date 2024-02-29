@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
     @Autowired
     private final StudentService studentService;
@@ -21,41 +21,32 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
-        Student student = studentService.findStudents(id);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+    public Student getStudentInfo(@PathVariable Long id) {
+        return studentService.findStudent(id);
     }
 
     @PostMapping
     public Student createStudent(@RequestBody Student student) {
-
         return studentService.createStudent(student);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> editStudent(@RequestBody Student student) {
-        Student findStudent = studentService.editStudent(student);
-        if (findStudent == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        return ResponseEntity.ok(findStudent);
+    public Student editStudent(@PathVariable("id") long id, @RequestBody Student student) {
+        return studentService.editStudent(id, student);
     }
 
     @DeleteMapping("{id}")
-    public Student deleteStudent(@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    public ResponseEntity<Student> deleteStudent(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public List<Student> findByAge(@RequestParam int age) {
+        return studentService.findByAge(age);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Collection<Student>> getAllStudent() {
         return ResponseEntity.ok(studentService.getAllStudents());
-    }
-
-    @GetMapping
-    public List<Student> find(@RequestParam int age) {
-        return studentService.findAge(age);
     }
 }
