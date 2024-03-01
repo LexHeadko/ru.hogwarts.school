@@ -30,13 +30,18 @@ public class StudentController {
         return studentService.createStudent(student);
     }
 
-    @PutMapping("/{id}")
-    public Student editStudent(@PathVariable("id") long id, @RequestBody Student student) {
-        return studentService.editStudent(id, student);
+    @PutMapping
+    public ResponseEntity<Student> editStudent(@RequestBody Student student) {
+        Student foundStudent = studentService.editStudent(student);
+        if (foundStudent == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(foundStudent);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable("id") Long id) {
+        studentService.deleteStudent(id);
         return ResponseEntity.ok().build();
     }
 

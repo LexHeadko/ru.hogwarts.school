@@ -7,10 +7,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,10 +22,7 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Student editStudent(long id, Student student) {
-        if (studentRepository.findById(id).isEmpty()) {
-            throw new StudentNotFoundException(id);
-        }
+    public Student editStudent(Student student) {
         return studentRepository.save(student);
     }
 
