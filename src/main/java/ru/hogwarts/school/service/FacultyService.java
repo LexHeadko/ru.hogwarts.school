@@ -4,18 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.entity.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
-    @Autowired
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
@@ -23,25 +19,32 @@ public class FacultyService {
     }
 
     public Faculty createFaculty(Faculty faculty) {
+        faculty.setId(null);
         return facultyRepository.save(faculty);
     }
 
-    public Faculty editFaculty(Faculty faculty) {
-        return facultyRepository.save(faculty);
+    public Faculty editFaculty(long id, Faculty faculty) {
+        return facultyRepository.findById(id)
+                .map(oldFaculty -> {
+                    oldFaculty.setName(faculty.getName());
+                    oldFaculty.setColor(faculty.getColor());
+                    return facultyRepository.save(oldFaculty);
+                })
+                .orElseThrow(()-> new FacultyNotFoundException(id));
     }
 
-    public void deleteFaculty(long id) {
-        if (facultyRepository.findById(id).isEmpty()) {
-            throw new FacultyNotFoundException(id);
-        }
-        facultyRepository.deleteById(id);
+    public Faculty deleteFaculty(long id) {
+        return facultyRepository.findById(id)
+                .map(faculty -> {
+                    facultyRepository.delete(faculty);
+                    return faculty;
+                })
+                .orElseThrow(() -> new FacultyNotFoundException(id));
     }
 
     public Faculty findFaculty(Long id) {
-        if (facultyRepository.findById(id).isEmpty()) {
-            throw new StudentNotFoundException(id);
-        }
-        return facultyRepository.getById(id);
+        return facultyRepository.findById(id)
+                .orElseThrow(() -> new FacultyNotFoundException(id));
     }
 
     public Collection<Faculty> getAllFaculty() {
