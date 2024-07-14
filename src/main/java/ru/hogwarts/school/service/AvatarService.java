@@ -2,11 +2,13 @@ package ru.hogwarts.school.service;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.entity.Avatar;
 import ru.hogwarts.school.entity.Student;
+import ru.hogwarts.school.exception.AvatarNotFoundException;
 import ru.hogwarts.school.exception.AvatarProcessingException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -44,7 +46,7 @@ public class AvatarService {
         }
     }
 
-    public void upLoadAvatar(long studentId, MultipartFile image) {
+    public void uploadAvatar(long studentId, MultipartFile image) {
         try {
             Student student = studentRepository.findById(studentId)
                     .orElseThrow(() -> new StudentNotFoundException(studentId));
@@ -65,6 +67,22 @@ public class AvatarService {
         } catch (IOException e) {
             throw new AvatarProcessingException(e);
         }
+    }
+    public Pair<byte[], String> getAvatarFromDb(long studentId) {
+        Avatar avatar = avatarRepository.findByStudent_Id(studentId)
+                .orElseThrow(() -> new AvatarNotFoundException(studentId));
+        return Pair.of((avatar.getData()), avatar.getMediaType());
+    }
 
+
+    public Pair<byte[], String> getAvatarFromFs(long studentId) {
+        try {
+            Avatar avatar = avatarRepository.findByStudent_Id(studentId)
+                    .orElseThrow(() -> new AvatarNotFoundException(studentId));
+            byte[] data = Files.readAllBytes(Paths.get(avatar.getFilePath()));
+            return Pair.of(data, avatar.getMediaType());
+        } catch (IOException e) {
+            throw new AvatarProcessingException(e);
+        }
     }
 }
