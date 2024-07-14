@@ -29,7 +29,7 @@ public class AvatarService {
 
     public AvatarService(AvatarRepository avatarRepository,
                          StudentRepository studentRepository,
-                         @Value("${application.path-to-avatars-dir}") String pathToAvatarsDir, String pathToAvatarsDir1) {
+                         @Value("${application.path-to-avatars-dir}") String pathToAvatarsDir) {
         this.avatarRepository = avatarRepository;
         this.studentRepository = studentRepository;
         this.pathToAvatarsDir = Paths.get(pathToAvatarsDir);
